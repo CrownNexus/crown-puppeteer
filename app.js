@@ -7,6 +7,7 @@ let browser;
 async function getBrowser() {
   if (!browser) {
     try {
+      // Using the modern 'headless: "new"' setting
       browser = await puppeteer.launch({
         headless: "new",
         args: [
