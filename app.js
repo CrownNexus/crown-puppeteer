@@ -8,12 +8,29 @@ async function getBrowser() {
   if (!browser) {
     try {
       browser = await puppeteer.launch({
-        headless: true,
+        headless: "new",
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
-          '--disable-gpu'
+          '--disable-gpu',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process',
+          '--disable-background-networking',
+          '--disable-background-timer-throttling',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-breakpad',
+          '--disable-component-update',
+          '--disable-extensions',
+          '--disable-features=TranslateUI',
+          '--disable-ipc-flooding-protection',
+          '--disable-renderer-backgrounding',
+          '--enable-features=NetworkService,NetworkServiceInProcess',
+          '--force-color-profile=srgb',
+          '--metrics-recording-only',
+          '--disable-default-apps'
         ]
       });
     } catch (err) {
@@ -32,7 +49,8 @@ app.get('/proxy', async (req, res) => {
 
   try {
     const page = await (await getBrowser()).newPage();
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+    await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
     const html = await page.content();
     await page.close();
 
