@@ -7,7 +7,6 @@ let browser;
 async function getBrowser() {
   if (!browser) {
     try {
-      // Using the modern 'headless: "new"' setting
       browser = await puppeteer.launch({
         headless: "new",
         args: [
@@ -51,7 +50,7 @@ app.get('/proxy', async (req, res) => {
   try {
     const page = await (await getBrowser()).newPage();
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-    await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 }); // ⬅️ 60 seconds timeout
     const html = await page.content();
     await page.close();
 
